@@ -8,7 +8,7 @@ function sendTelegramMessage($pm) {
 
 	$data = array(
 		'chat_id' 	=> $chat_id,
-		'text' 		=> $pm . "\n\n----------------------------------\n" . base64_decode("V0hNQ1MgSXRGaW5kZW4=")
+		'text' 		=> $pm . "\n\n-------------n" . base64_decode("V0hNQ1MgSXRGaW5kZW4=")
 	);
 
 	$curl = curl_init();
@@ -23,7 +23,7 @@ function sendTelegramMessage($pm) {
 
 function wt_note_ClientAdd($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("Un nuevo usuario ha iniciado sesión\n------------ \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/clientssummary.php?userid='.$vars['userid']);
+	sendTelegramMessage("Un nuevo usuario ha iniciado sesión\n------------- \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/clientssummary.php?userid='.$vars['userid']);
 }
 
 function wt_note_InvoicePaid($vars) {
@@ -33,12 +33,12 @@ function wt_note_InvoicePaid($vars) {
 
 function wt_note_TicketOpen($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("Se creó un nuevo ticket :\n---------------------------------------------------------------------------------------------- \n\n شناسه تیکت : $vars[ticketid] \n\n دپارتمان : $vars[deptname] \n\n عنوان تیکت : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid']);
+	sendTelegramMessage("Se creó un nuevo ticket :\n------------- \n\n ID de entrada : $vars[ticketid] \n\n Departamento : $vars[deptname] \n\n Titulo de entrada : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid']);
 }
 
 function wt_note_TicketUserReply($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("La nueva respuesta al TICKET :\n---------------------------------------------------------------------------------------------- \n\n شناسه تیکت : $vars[ticketid] \n\n دپارتمان : $vars[deptname] \n\n عنوان تیکت : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid'], $application_botkey, $application_chatid);
+	sendTelegramMessage("La nueva respuesta al TICKET :\n------------- \n\n ID de entrada : $vars[ticketid] \n\n Departamento : $vars[deptname] \n\n Asunto : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid'], $application_botkey, $application_chatid);
 
 }
 

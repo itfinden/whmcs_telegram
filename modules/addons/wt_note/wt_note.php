@@ -4,14 +4,14 @@ if (!defined("WHMCS"))
 
 function wt_note_config() {
 	$configarray = array(
-	"name" => "ماژول اطلاع رسانی از طریق تلگرام",
-	"description" => "اطلاع رسانی به مدیر و پشتبانان سایت از طریق تلگرام - طراحی و کدنویسی شده توسط میلاد مالدار",
+	"name" => "Módulo de notificación de telegramas.",
+	"description" => "Notifique al administrador y a los patrocinadores del sitio a través de telegram - Diseñado y codificado por Milad Livestock",
 	"version" => "1.0",
-	"author" => "<a href='http://ltiny.ir' target='_blank' style='color:#0000FF; text-decoration: none;'>میلاد مالدار</a>",
-	"language" => "english",
+	"author" => "ITFINDEN",
+	"language" => "Español",
 	"fields" => array(
-	"key" => array ("FriendlyName" => "Bot Token", "Type" => "text", "Size" => "50", "Description" => "بوت توکن دریافت شده از ربات تلگرام - <a href='http://ltiny.ir/telegram-bot' target='_blank' style='color:#0000FF; text-decoration: none;'>آموزش ساخت ربات تلگرام و دریافت Bot Token</a>", "Default" => "", ),
-	"chatid" => array ("FriendlyName" => "Chat ID", "Type" => "text", "Size" => "50", "Description" => "چت آی دی تلگرام خود را وارد کنید - <a href='http://ltiny.ir/telegram-chat-id' target='_blank' style='color:#0000FF; text-decoration: none;'>آموزش دریافت Chat ID تلگرام</a>", "Default" => "", ),
+	"key" => array ("FriendlyName" => "Bot Token", "Type" => "text", "Size" => "50", "Description" => "Túnel de arranque recibido de Telegram Robot - <a href='http://itfinden.com/telegram-bot' target='_blank' style='color:#0000FF; text-decoration: none;'>Aprende a construir telegramas y recibir robots. Bot Token</a>", "Default" => "", ),
+	"chatid" => array ("FriendlyName" => "Chat ID", "Type" => "text", "Size" => "50", "Description" => "Entra en tu chat telegrama IP - <a href='http://ltiny.ir/telegram-chat-id' target='_blank' style='color:#0000FF; text-decoration: none;'>Recibir entrenamiento Chat ID Telegrama</a>", "Default" => "", ),
 	));
 	return $configarray;
 }
