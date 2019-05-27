@@ -8,7 +8,7 @@ function sendTelegramMessage($pm) {
 
 	$data = array(
 		'chat_id' 	=> $chat_id,
-		'text' 		=> $pm . "\n\n----------------------------------------------------------------------------------------------\n" . base64_decode("V0hNQ1MgVGVsZWdyYW0gTm90aWZpY2F0aW9uIE1vZHVsZSBCeSBsdGlueS5pcg==")
+		'text' 		=> $pm . "\n\n----------------------------------\n" . base64_decode("V0hNQ1MgSXRGaW5kZW4=")
 	);
 
 	$curl = curl_init();
@@ -23,22 +23,22 @@ function sendTelegramMessage($pm) {
 
 function wt_note_ClientAdd($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("یک کاربر جدید در سیستم ثبت شد \n---------------------------------------------------------------------------------------------- \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/clientssummary.php?userid='.$vars['userid']);
+	sendTelegramMessage("Un nuevo usuario ha iniciado sesión\n------------ \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/clientssummary.php?userid='.$vars['userid']);
 }
 
 function wt_note_InvoicePaid($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("یک فاکتور با مشخصات زیر پرداخت شد \n---------------------------------------------------------------------------------------------- \n\n شناسه فاکتور : $vars[invoiceid] \n\n مبلغ : $vars[total] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/invoices.php?action=edit&id='.$vars['invoiceid']);
+	sendTelegramMessage("Se pagó una factura :\n------------- \n\n N_Factura : $vars[invoiceid] \n\n Cantidad : $vars[total] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/invoices.php?action=edit&id='.$vars['invoiceid']);
 }
 
 function wt_note_TicketOpen($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("یک تیکت جدید با مشخصات زیر ایجاد شد \n---------------------------------------------------------------------------------------------- \n\n شناسه تیکت : $vars[ticketid] \n\n دپارتمان : $vars[deptname] \n\n عنوان تیکت : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid']);
+	sendTelegramMessage("Se creó un nuevo ticket :\n---------------------------------------------------------------------------------------------- \n\n شناسه تیکت : $vars[ticketid] \n\n دپارتمان : $vars[deptname] \n\n عنوان تیکت : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid']);
 }
 
 function wt_note_TicketUserReply($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("پاسخ جدید به تیکت با مشخصات زیر توسط کاربر ارسال شد \n---------------------------------------------------------------------------------------------- \n\n شناسه تیکت : $vars[ticketid] \n\n دپارتمان : $vars[deptname] \n\n عنوان تیکت : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid'], $application_botkey, $application_chatid);
+	sendTelegramMessage("La nueva respuesta al TICKET :\n---------------------------------------------------------------------------------------------- \n\n شناسه تیکت : $vars[ticketid] \n\n دپارتمان : $vars[deptname] \n\n عنوان تیکت : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid'], $application_botkey, $application_chatid);
 
 }
 
