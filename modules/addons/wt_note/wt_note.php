@@ -4,7 +4,7 @@ if (!defined("WHMCS"))
 
 function wt_note_config() {
 	$configarray = array(
-	"name" => "Módulo de notificación de telegramas.",
+	"name" => "ITFINDEN Bot",
 	"description" => "Notifique al administrador y a los patrocinadores del sitio a través de telegram - Diseñado y codificado por Milad Livestock",
 	"version" => "1.1",
 	"author" => "ITFINDEN",
