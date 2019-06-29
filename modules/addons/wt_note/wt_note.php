@@ -6,12 +6,12 @@ function wt_note_config() {
 	$configarray = array(
 	"name" => "Módulo de notificación de telegramas.",
 	"description" => "Notifique al administrador y a los patrocinadores del sitio a través de telegram - Diseñado y codificado por Milad Livestock",
-	"version" => "1.0",
+	"version" => "1.1",
 	"author" => "ITFINDEN",
-	"language" => "Español",
+	"language" => "english",
 	"fields" => array(
 	"key" => array ("FriendlyName" => "Bot Token", "Type" => "text", "Size" => "50", "Description" => "Túnel de arranque recibido de Telegram Robot - <a href='http://itfinden.com/telegram-bot' target='_blank' style='color:#0000FF; text-decoration: none;'>Aprende a construir telegramas y recibir robots. Bot Token</a>", "Default" => "", ),
-	"chatid" => array ("FriendlyName" => "Chat ID", "Type" => "text", "Size" => "50", "Description" => "Entra en tu chat telegrama IP - <a href='http://ltiny.ir/telegram-chat-id' target='_blank' style='color:#0000FF; text-decoration: none;'>Recibir entrenamiento Chat ID Telegrama</a>", "Default" => "", ),
+	"chatid" => array ("FriendlyName" => "Chat ID", "Type" => "text", "Size" => "50", "Description" => "Entra en tu chat telegrama IP - <a href='http://itfinden.com/telegram-bot' target='_blank' style='color:#0000FF; text-decoration: none;'>Recibir entrenamiento Chat ID Telegrama</a>", "Default" => "", ),
 	));
 	return $configarray;
 }
@@ -50,10 +50,11 @@ function wt_note_output($vars) {
 
 	} elseif( $_GET['disable'] == '1' && mysql_num_rows($access_token) ) {
 		full_query("DELETE FROM `wikitelegramnote` WHERE `adminid` = '".$_SESSION['adminid']."'");
-		echo "<div class='infobox'><strong>افزونه اطلاع رسانی با موفقیت غیر فعال شد</strong><br>دیتابیس افزونه اطلاع رسانی با موفقیت حذف و افزونه غیر فعال شد</div>";
+		echo "<div class='infobox'><strong>El complemento de notificación ha sido deshabilitado con éxito.</strong>
+		<br>La base de datos del complemento de notificación se eliminó con éxito y el complemento se desactivó</div>";
 	} elseif( mysql_num_rows($access_token) && $_POST ){
 		update_query('wikitelegramnote',array('permissions' => serialize($_POST['wt_notefication'])), array('adminid' => $_SESSION['adminid']));
-		echo "<div class='infobox'><strong>تغییرات ذخیره شد</strong><br>تغییرات با موفقیت ذخیره شد</div>";    
+		echo "<div class='infobox'><strong>Cambios guardados</strong><br>Cambios guardados exitosamente</div>";    
 	}
 
 	$access_token = select_query('wikitelegramnote', '', array('adminid' => $_SESSION['adminid']));
@@ -61,24 +62,24 @@ function wt_note_output($vars) {
 	$permissions = unserialize($result['permissions']);   
 
 	if ( !mysql_num_rows($access_token)) {
-		echo "<p><a href='addonmodules.php?module=wt_note&setup=1'>فعال سازی سیستم ارسال اطلاعیه</a></p>";
+		echo "<p><a href='addonmodules.php?module=wt_note&setup=1'>Activar el sistema para enviar notificaciones.</a></p>";
 	} else {
-		echo "<p><a href='addonmodules.php?module=wt_note&disable=1'>غیرفعال سازی سیستم ارسال اطلاعیه</a></p>";
+		echo "<p><a href='addonmodules.php?module=wt_note&disable=1'>Deshabilitar el sistema de notificación.</a></p>";
 		echo '<form method="POST"><table class="form" width="100%" border="0" cellspacing="2" cellpadding="3">
 		<tr>
-		<td class="fieldlabel" width="200px">ارسال پیام زمانی که :</td>
+		<td class="fieldlabel" width="200px">Enviar mensaje cuando:</td>
 		<td class="fieldarea">
 		<table width="100%">
 		<tr>
 		<td valign="top">
-		<input type="checkbox" name="wt_notefication[new_client]" value="1" id="wt_notefications_new_client" '.($permissions['new_client'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_client">کاربر جدید عضو شد</label><br>
-		<input type="checkbox" name="wt_notefication[new_invoice]" value="1" id="wt_notefications_new_invoice" '.($permissions['new_invoice'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_invoice">فاکتوری پرداخت شد</label><br>
-		<input type="checkbox" name="wt_notefication[new_update]" value="1" id="wt_notefications_new_update" '.($permissions['new_update'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_update">مشتری به تیکتی پاسخ داد</label><br>
-		<input type="checkbox" name="wt_notefication[new_ticket]" value="1" id="wt_notefications_new_ticket" '.($permissions['new_ticket'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_ticket">تیکت پشتیبانی جدید ایجاد شد</label><br>
+		<input type="checkbox" name="wt_notefication[new_client]" value="1" id="wt_notefications_new_client" '.($permissions['new_client'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_client">Nuevo usuario registrado</label><br>
+		<input type="checkbox" name="wt_notefication[new_invoice]" value="1" id="wt_notefications_new_invoice" '.($permissions['new_invoice'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_invoice">Factura Pagada</label><br>
+		<input type="checkbox" name="wt_notefication[new_update]" value="1" id="wt_notefications_new_update" '.($permissions['new_update'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_update">El cliente respondió a la venta de entradas.</label><br>
+		<input type="checkbox" name="wt_notefication[new_ticket]" value="1" id="wt_notefications_new_ticket" '.($permissions['new_ticket'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_ticket">Se ha creado un nuevo ticker de soporte.</label><br>
 		</td>
 		</tr>
 		</table>
 		</table>
-		<p align="center"><input type="submit" value="ذخیره سازی تغییرات" class="button"></p></form>';
+		<p align="center"><input type="submit" value="Guardar Cambios" class="button"></p></form>';
 	}
 }
