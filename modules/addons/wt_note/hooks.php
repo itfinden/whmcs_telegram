@@ -1,4 +1,19 @@
 <?php
+
+function itfinden_log($log_msg)
+{
+    $log_filename = "/home/itfinden/customer.itfinden.com/modules/addons/wt_note/itfinden_log";
+    if (!file_exists($log_filename)) 
+    {
+        // create directory/folder uploads.
+        mkdir($log_filename, 0777, true);
+    }
+    
+    $log_file_data = $log_filename.'/log_' . date('d-M-Y') . '.log';
+    // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
+    file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
+}
+
 function sendTelegramMessage($pm) {
 	global $vars;
 	$application_chatid = mysql_fetch_array( select_query('tbladdonmodules', 'value', array('module' => 'wt_note', 'setting' => 'chatid') ), MYSQL_ASSOC );
@@ -8,41 +23,68 @@ function sendTelegramMessage($pm) {
 
 	$data = array(
 		'chat_id' 	=> $chat_id,
-		'text' 		=> $pm . "\n\n-------------n" . base64_decode("V0hNQ1MgSXRGaW5kZW4=")
+		'text' 		=> PHP_EOL. $pm . PHP_EOL."-------------" . PHP_EOL. base64_decode("V0hNQ1MgSXRGaW5kZW4=")
 	);
-
+    
+    itfinden_log($pm);
+    
 	$curl = curl_init();
-	curl_setopt($curl, CURLOPT_URL, "https://api.telegram.org/bot$botToken/sendMessage");
+	curl_setopt($curl, CURLOPT_URL, "https://api.telegram.org/bot".$botToken."/sendMessage");
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	curl_exec($curl);
+	
+	if(!curl_errno($curl))
+        {
+         $info = curl_getinfo($curl);
+         itfinden_log ('Tiempo ' . $info['total_time'] . ' URL :  ' . $info['url']);
+        }
+        
+        // Close handle
+	
 	curl_close($curl);
+
 }
 
-function wt_note_ClientAdd($vars) {
+function Gen_Message($vars){
+    
+    $vars=str_replace('<BREAKLINE>',PHP_EOL,$vars);
+    sendTelegramMessage($vars);
+}
+
+
+function itfinden_ClientAdd($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("Un nuevo usuario ha iniciado sesión\n------------- \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/clientssummary.php?userid='.$vars['userid']);
+	Gen_Message("Un nuevo usuario ha iniciado sesion :<BREAKLINE> ------------------------------------- <BREAKLINE>". $CONFIG['SystemURL'].'/'.$customadminpath.'/clientssummary.php?userid='.$vars['userid']);
 }
 
-function wt_note_InvoicePaid($vars) {
+function itfinden_InvoicePaid($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("Se pagó una factura :\n------------- \n\n N_Factura : $vars[invoiceid] \n\n Cantidad : $vars[total] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/invoices.php?action=edit&id='.$vars['invoiceid']);
+	Gen_Message("Se pago una factura :<BREAKLINE> ------------------- <BREAKLINE> N_Factura : $vars[invoiceid] <BREAKLINE> Cantidad : $vars[total] <BREAKLINE>". $CONFIG['SystemURL'].'/'.$customadminpath.'/invoices.php?action=edit&id='.$vars['invoiceid']);
 }
 
-function wt_note_TicketOpen($vars) {
+function itfinden_TicketOpen($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("Se creó un nuevo ticket :\n------------- \n\n ID de entrada : $vars[ticketid] \n\n Departamento : $vars[deptname] \n\n Titulo de entrada : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid']);
+	Gen_Message("Se creo un nuevo ticket :<BREAKLINE> ----------------------- <BREAKLINE> ID de entrada : $vars[ticketid] <BREAKLINE> Departamento : $vars[deptname] <BREAKLINE> Titulo de entrada : $vars[subject] <BREAKLINE>". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid']);
 }
 
-function wt_note_TicketUserReply($vars) {
+function itfinden__TicketUserReply($vars) {
 	global $customadminpath, $CONFIG;
-	sendTelegramMessage("La nueva respuesta al TICKET :\n------------- \n\n ID de entrada : $vars[ticketid] \n\n Departamento : $vars[deptname] \n\n Asunto : $vars[subject] \n\n". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid'], $application_botkey, $application_chatid);
+	Gen_Message("La nueva respuesta al TICKET :<BREAKLINE> ----------------------------- <BREAKLINE> ID de entrada : $vars[ticketid] <BREAKLINE> Departamento : $vars[deptname] <BREAKLINE> Asunto : $vars[subject] <BREAKLINE>". $CONFIG['SystemURL'].'/'.$customadminpath.'/supporttickets.php?action=viewticket&id='.$vars['ticketid'], $application_botkey, $application_chatid);
+
+}
+function itfinden_admin_notificate($vars) {
+	global $customadminpath, $CONFIG;
+	$ip=$_SERVER['REMOTE_ADDR'];
+	Gen_Message("Inicio de Session :<BREAKLINE> ----------------------------- <BREAKLINE> El $vars[admin_username] ha iniciado session <BREAKLINE> desde la ip $ip");
 
 }
 
-add_hook("ClientAdd",1,"wt_note_ClientAdd");
-add_hook("InvoicePaid",1,"wt_note_InvoicePaid");
-add_hook("TicketOpen",1,"wt_note_TicketOpen");
-add_hook("TicketUserReply",1,"wt_note_TicketUserReply");
+add_hook("AdminLogin", 1, "itfinden_admin_notificate");
+add_hook("ClientAdd",1,"itfinden_ClientAdd");
+add_hook("InvoicePaid",1,"itfinden_InvoicePaid");
+add_hook("TicketOpen",1,"itfinden_TicketOpen");
+add_hook("TicketUserReply",1,"itfinden_TicketUserReply");
+
