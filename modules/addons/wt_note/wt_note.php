@@ -1,10 +1,12 @@
 <?php
+
+
 if (!defined("WHMCS"))
 	die("This file cannot be accessed directly");
 
 function wt_note_config() {
 	$configarray = array(
-	"name" => "ITFINDEN Bot",
+	"name" => "Itfinden Bot",
 	"description" => "Notifique al administrador y a los patrocinadores del sitio a través de telegram - Diseñado y codificado por Milad Livestock",
 	"version" => "1.1",
 	"author" => "ITFINDEN",
@@ -76,6 +78,7 @@ function wt_note_output($vars) {
 		<input type="checkbox" name="wt_notefication[new_invoice]" value="1" id="wt_notefications_new_invoice" '.($permissions['new_invoice'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_invoice">Factura Pagada</label><br>
 		<input type="checkbox" name="wt_notefication[new_update]" value="1" id="wt_notefications_new_update" '.($permissions['new_update'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_update">El cliente respondió tickets de venta.</label><br>
 		<input type="checkbox" name="wt_notefication[new_ticket]" value="1" id="wt_notefications_new_ticket" '.($permissions['new_ticket'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_ticket">Se ha creado un nuevo ticker de soporte.</label><br>
+        <input type="checkbox" name="wt_notefication[new_logon]" value="1" id="wt_notefications_new_logon" '.($permissions['new_logon'] == "1" ? "checked" : "").'> <label for="wt_notefications_new_logon">Se ha iniciado logon como Administrador.</label><br>		
 		</td>
 		</tr>
 		</table>
