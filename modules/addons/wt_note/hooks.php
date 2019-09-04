@@ -13,6 +13,24 @@ function itfinden_log($log_msg)
     // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
     file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
 }
+function itfinden_dump($log_msg)
+{
+    $log_filename = "/home/itfinden/customer.itfinden.com/modules/addons/wt_note/itfinden_dump";
+    
+    $log_msg=var_export($log_msg,TRUE) 
+	
+    if (!file_exists($log_filename)) 
+    {
+        // create directory/folder uploads.
+        mkdir($log_filename, 0777, true);
+    }
+    
+    $log_file_data = $log_filename.'/dump_' . date('d-M-Y') . '.log';
+    // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
+    file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
+}
+
+
 
 function sendTelegramMessage($pm) {
 	global $vars;
@@ -81,10 +99,26 @@ function itfinden_admin_notificate($vars) {
 	Gen_Message("Inicio de Session :<BREAKLINE> ----------------------------- <BREAKLINE> El $vars[admin_username] ha iniciado session <BREAKLINE> desde la ip $ip");
 
 }
+function itfinden_AcceptQuote($vars) {
+	global $customadminpath, $CONFIG;
+	$ip=$_SERVER['REMOTE_ADDR'];
+	itfinden_dump($vars);
+	Gen_Message("La Cotizacion :<BREAKLINE> ----------------------------- <BREAKLINE> El $vars[admin_username] ha iniciado session <BREAKLINE> desde la ip $ip");
+
+}
+function itfinden_AddInvoicePayment($vars) {
+	global $customadminpath, $CONFIG;
+	$ip=$_SERVER['REMOTE_ADDR'];
+	itfinden_dump($vars);
+	Gen_Message("se agrego pago a factura :<BREAKLINE> ----------------------------- <BREAKLINE> El $vars[admin_username] ha iniciado session <BREAKLINE> desde la ip $ip");
+
+}
 
 add_hook("AdminLogin", 1, "itfinden_admin_notificate");
 add_hook("ClientAdd",1,"itfinden_ClientAdd");
 add_hook("InvoicePaid",1,"itfinden_InvoicePaid");
 add_hook("TicketOpen",1,"itfinden_TicketOpen");
 add_hook("TicketUserReply",1,"itfinden_TicketUserReply");
+#add_hook("AcceptQuote",1,"itfinden_AcceptQuote");
+#add_hook("AddInvoicePayment",1,"itfinden_AddInvoicePayment");
 
